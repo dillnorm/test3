@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Eagle FLEX - Teams</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="index.html">Eagle <span class="logo_colour">FLEX</span></a></h1> 
+          <h2>Georgia Southern Athlete Wellness Tracker</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li class="selected"><a href="index.html">Home</a></li>
+          <li><a href="surveys.html">Surveys</a></li>
+          <li><a href="teams.html">Teams</a></li>
+          <li><a href="personal.html">Personal Settings</a></li>
+          <li><a href="contact.html">Contact Info</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <h1>Team and Athlete Data</h1>
+		<h3>Select Team/Athletes to View Data</h3>
+		<form action="/GetTeamData" method="post">
+          <div class="form_settings">
+			<h4>Select Team</h4>
+			<p><select id="id" name="TeamSelect">
+				<option value="20">All Teams</option>
+				<option value="1">Baseball</option>
+				<option value="2">Basketball (Mens) </option>
+				<option value="3">Basketball (Womens) </option>
+				<option value="4">Cheer</option>
+				<option value="5">Golf</option>
+				<option value="6">Rifle</option>
+				<option value="7">Soccer (Mens) </option>
+				<option value="8">Soccer (Womens) </option>
+				<option value="9">Softball</option>
+				<option value="10">Swim and Dive</option>
+				<option value="11">Tennis (Mens)</option>
+				<option value="12">Tennis (Womens) </option>
+				<option value="13">Track & Cross Country</option>
+				<option value="14">Volley ball</option>
+			</select></p>
+			<h4>Select Athlete</h4>
+			<p><select id="id" name="AthleteSelect"><option value="1">Entire Team</option><option value="2">Thomas Muller</option></select></p>
+			<h4>Select Question From Which To View Data</h4>
+			<p><select id="id" name="QuestSelect"><option value="1">Question 1: Water</option><option value="2">Question 2: Sleep</option></select></p>
+			
+			<p style="padding-top: 15px"><input class="submit" type="submit" name="login_submit" value="Submit" /></p>
+		  </div>
+		</form>
+		
+		<p></p>
+		<h1>Survey Data</h1>
+		<table border="1" cellpadding="7" cellspacing="7">
+  		<tr>
+    		<th width="50px">No</th>
+    		<th>Athlete Name</th>
+    		<th>Athlete Email</th>
+    		<th>Team ID</th>
+    		<th>Completed Survey</th>
+  		</tr>
+  		<% if(data.length){ 
+    			for(var i = 0;i < data.length;i++) { %>
+  			<tr>
+   			<td><%=(i+1)%></td>
+    			<td><%=data[i].full_name%></td>
+    			<td><%=data[i].email%></td>
+    			<%if(data[i].team_ID == 1){%>
+				<td>BaseBall</td>
+				<%}
+				else if(data[i].team_ID == 2){%>
+				<td>Basketball</td>
+			<%}%>
+    			<td><%=data[i].survey_done%></td>
+  			</tr>
+  		<% }
+  		}else{ %>
+  		<tr>
+    		<td colspan="3">No Results</td>
+  		</tr>
+		<% } %>
+		</table>
+	  </div>
+    </div>
+    <div id="footer">
+	  <p><a href="index.html">Home</a> | <a href="examples.html">Surveys</a> | <a href="page.html">Teams</a> | <a href="another_page.html">Personal Settings</a> | <a href="contact.html">Contact Us</a></p>      
+    </div>
+  </div>
+</body>
+</html>

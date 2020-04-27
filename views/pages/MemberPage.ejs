@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<title>Library Database</title>
+<meta http-equiv ="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
+</style>
+
+<style>
+#books {
+
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#books td, #books  th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#books tr:nth-child(even){background-color: #f2f2f2;}
+
+#books tr:hover {background-color: #ddd;}
+
+#books th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #406280;
+  color: white;
+}
+</style>
+
+</head>
+<body class="w3-theme-l5">
+
+
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="https://testdemoforproject2.herokuapp.com/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Logout</a>
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1900px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">Admin Profile</h4>
+         <p class="w3-center"><img src="https://cdn3.vectorstock.com/i/1000x1000/53/42/user-member-avatar-face-profile-icon-vector-22965342.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+         <label id= name><%= name %></label>
+	<hr>
+
+        </div>
+      </div>
+    </div>
+      <br>
+
+    <!-- Middle Column -->
+    <div class="w3-col m7">
+    
+      <div class="w3-row-padding">
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+             <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Current Surveys: </h6>
+		<p>Here will be a table containing survey and buttons to modify the database</p>
+  <form id="quiz" action="/submitAnswers" method= "post">
+    <!-- Question 1 -->
+    <h2>How Physically Healthy are you?</h2>
+    <!-- Here are the choices for the first question. Each input tag must have the same name. For this question, the name is q1. -->
+    <!-- The value is which answer the choice corresponds to. -->
+    <label><input type="radio" name="q1" value="c1">
+      Not at all
+    </label><br />
+    <label><input type="radio" name="q1" value="c2">
+      Somewhat
+    </label><br />
+    <label><input type="radio" name="q1" value="c3">
+      Good
+    </label><br />
+    <label><input type="radio" name="q1" value="c4">
+      Very
+    </label><br />
+
+    <!-- Question 2 -->
+    <h2>Do you feel you get too much excercise?</h2>
+    <!-- Here are the choices for the second question. Notice how each input tag has the same name (q2), but a different name than the previous question. -->
+    <label><input type="radio" name="q2" value="c1">
+      No
+    </label><br />
+    <label><input type="radio" name="q2" value="c2">
+      Somewhat
+    </label><br />
+    <label><input type="radio" name="q2" value="c3">
+      Alot
+    </label><br />
+    <label><input type="radio" name="q2" value="c4">
+      Too Much
+    </label><br />
+    
+    <!-- Question 3 -->
+    <h2>How Much water did you drink today?</h2>
+    <!-- Choices for the third question -->
+    <label><input type="radio" name="q3" value="c1">
+      None
+    </label><br />
+    <label><input type="radio" name="q3" value="c2">
+      Some
+    </label><br />
+    <label><input type="radio" name="q3" value="c3">
+      Enough
+    </label><br />
+    <label><input type="radio" name="q3" value="c4">
+      Alot
+    </label><br />
+    
+    <!-- Question 4 -->
+    <h2>How much discomfort do you feel after excercising?</h2>
+    <!-- Choices for the fourth question -->
+    <label><input type="radio" name="q4" value="c1">
+      None
+    </label><br />
+    <label><input type="radio" name="q4" value="c2">
+      Some
+    </label><br />
+    <label><input type="radio" name="q4" value="c3">
+      A Good Amount
+    </label><br />
+    <label><input type="radio" name="q4" value="c4">
+      Alot
+    </label><br />
+    
+    <button type="submit" id="submit" onclick="tabulateAnswers()">Submit Your Answers</button>
+  <button type="reset" id="reset" onclick="resetAnswer()">Reset</button>
+  </form>
+  
+  
+  <div id="answer">Your result will show up here!</div>
+</div>
+ </div>
+            <div class="w3-container w3-padding">
+            </div>
+          </div>
+          <div class="w3-card w3-round w3-white">
+          <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Past Survey Results: </h6>
+		<p> Here will be a table containing survey answers retrieved from the database as a table </p>
+		<form class="w3-container w3-card-4" action="/getUsers" method= "post">
+		<p><label>Display all members: </label>
+		<button type ="submit" value ="GetAll"> Get All </button>
+		</p>
+		</form>
+
+		<form class="w3-container w3-card-4" action="/getSurvey" method= "post">
+		<p><label>Survey Results: </label>
+		<button type ="submit" value ="GetTable"> Get Table </button>
+		</p>
+		</form>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      
+    <!-- End Middle Column -->
+    </div>
+    
+    <!-- Right Column -->
+   
+      
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+<p>  </p>
+
+<!-- End Page Container -->
+</body>
+<br>
+
+<!-- Footer -->
+<footer class="w3-container w3-theme-d3 w3-padding-16">
+  <h5>Footer</h5>
+</footer>
+
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+<script>
+// function to calculate the result of the survey
+function tabulateAnswers() {
+  // initialize variables for each choice's score
+  // If you add more choices and outcomes, you must add another variable here.
+  var c1score = 0;
+  var c2score = 0;
+  var c3score = 0;
+  var c4score = 0;
+  
+  // get a list of the radio inputs on the page
+  var choices = document.getElementsByTagName('input');
+  // loop through all the radio inputs
+  for (i=0; i<choices.length; i++) {
+    // if the radio is checked..
+    if (choices[i].checked) {
+      // add 1 to that choice's score
+      if (choices[i].value == 'c1') {
+        c1score = c1score + 1;
+      }
+      if (choices[i].value == 'c2') {
+        c2score = c2score + 1;
+      }
+      if (choices[i].value == 'c3') {
+        c3score = c3score + 1;
+      }
+      if (choices[i].value == 'c4') {
+        c4score = c4score + 1;
+      }
+      // If you add more choices and outcomes, you must add another if statement below.
+    }
+  }
+  
+  // Find out which choice got the highest score.
+  // If you add more choices and outcomes, you must add the variable here.
+  var maxscore = Math.max(c1score,c2score,c3score,c4score);
+  
+  // Display answer corresponding to that choice
+
+}
+
+// program the reset button
+function resetAnswer() {
+  var answerbox = document.getElementById('answer');
+  answerbox.innerHTML = "Your result will show up here!";
+}
+</script>
+</html>

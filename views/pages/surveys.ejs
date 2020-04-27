@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Eagle FLEX - Surveys</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <h1><a href="index.html">Eagle <span class="logo_colour">FLEX</span></a></h1>
+          <h2>Georgia Southern Athlete Wellness Tracker</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <li><a href="index.html">Home</a></li>
+          <li class="selected"><a href="surveys.html">Surveys</a></li>
+          <li><a href="teams.html">Teams</a></li>
+          <li><a href="personal.html">Personal Settings</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      <div class="sidebar">
+        <h2>Survey Details</h2>
+        <h4>Select Survey</h4>
+        <p>Select a survey to send or edit</p>
+          <div class="form_settings">
+			<p><select id="id" name="SurveySelect"><option value="1">Survey 1</option><option value="2">Survey 2</option></select></p>
+		  </div>
+        
+		<h4>Select Team (if sending survey)</h4>
+        <p>Select a team to send the survey to</p>
+		
+          <div class="form_settings">
+			<p><select id="id" name="TeamSelect"><option value="1">All Teams</option><option value="2">Soccer Team</option></select></p>
+		  </div>
+        
+		<h4>Select Athlete (if sending survey)</h4>
+        <p>Select a specific athlete to send the survey to (optional)</p>
+		
+          <div class="form_settings">
+			<p><select id="id" name="TeamSelect"><option value="1">Entire Team</option><option value="2">Cristiano Ronaldo</option></select></p>
+		  </div>
+		  
+		<button type="button" name = "Save Survey">Save Changes</button>
+		<button type="button" name = "Send">Send Survey</button>
+	
+      </div> 
+      <div id="content">
+        <h1>Surveys</h1>
+        <table border="1" cellpadding="7" cellspacing="7">
+  	<tr>
+    	<th width="50px">No</th>
+    	<th>Question ID Number</th>
+    	<th>Question Title</th>
+    	<th>Possible Answer Number</th>
+    	<th>Possible Answer Type</th>
+    	<th>Possible Answer Value</th>
+  	</tr>
+  	<% if(data.length){ 
+    		for(var i = 0;i < data.length;i++) { %>
+  		<tr>
+    		<td><%=(i+1)%></td>
+    		<td><%=data[i].question_ID%></td>
+    		<td><%=data[i].question%></td>
+    		<td><%=data[i].pa_ID%></td>
+    		<td><%=data[i].text%></td>
+    		<td><%=data[i].value%></td>
+  		</tr>
+ 		 <% }
+  	}else{ %>
+  		<tr>
+    		<td colspan="3">No Results</td>
+  		</tr>
+	<% } %>
+	</table>
+        <form action="/modSurvey" method="post"> 
+		<button type="button" name = "Add">Add Question To Survey</button>
+	</form>
+      </div>
+    </div>
+    <div id="footer">
+      <p><a href="index.html">Home</a> | <a href="surveys.html">Surveys</a> | <a href="teams.html">Teams</a> | <a href="personal.html">Personal Settings</a></p>
+    </div>
+  </div>
+</body>
+</html>

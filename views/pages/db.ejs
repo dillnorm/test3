@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<h1>All Current Users</h1>
+<table border="1" cellpadding="7" cellspacing="7">
+  <tr>
+    <th width="50px">No</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>EagleID</th>
+    <th>Password</th>
+  </tr>
+  <% if(data.length){ 
+    for(var i = 0;i < data.length;i++) { %>
+  <tr>
+    <td><%=(i+1)%></td>
+    <td><%=data[i].fname%></td>
+    <td><%=data[i].lname%></td>
+    <td><%=data[i].email%></td>
+    <td><%=data[i].EagleID%></td>
+    <td><%=data[i].password%></td>
+  </tr>
+  <% }
+  }else{ %>
+  <tr>
+    <td colspan="3">No Results</td>
+  </tr>
+<% } %>
+</table>
+</html>

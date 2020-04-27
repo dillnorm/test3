@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Eagle FLEX - Teams</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="index.html">Eagle <span class="logo_colour">FLEX</span></a></h1> 
+          <h2>Georgia Southern Athlete Wellness Tracker</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li class="selected"><a href="index.html">Home</a></li>
+          <li><a href="surveys.html">Surveys</a></li>
+          <li><a href="teams.html">Teams</a></li>
+          <li><a href="personal.html">Personal Settings</a></li>
+          <li><a href="contact.html">Contact Info</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <h1>Team and Athlete Data</h1>
+		<h3>Select Team/Athletes to View Data</h3>
+		<form action="#" method="post">
+          <div class="form_settings">
+			<h4>Select Team</h4>
+			<p><select id="id" name="TeamSelect"><option value="1">All Teams</option><option value="2">Soccer Team</option></select></p>
+			<h4>Select Athlete</h4>
+			<p><select id="id" name="AthleteSelect"><option value="1">Entire Team</option><option value="2">Thomas Muller</option></select></p>
+			<h4>Select Question From Which To View Data</h4>
+			<p><select id="id" name="QuestSelect"><option value="1">Question 1: Water</option><option value="2">Question 2: Sleep</option></select></p>
+			
+			<p style="padding-top: 15px"><input class="submit" type="submit" name="login_submit" value="Submit" /></p>
+		  </div>
+		</form>
+		
+		<p></p>
+		<h1>Survey Data</h1>
+		<p> Survey Data to appear here </p>
+	  </div>
+    </div>
+    <div id="footer">
+	  <p><a href="index.html">Home</a> | <a href="examples.html">Surveys</a> | <a href="page.html">Teams</a> | <a href="another_page.html">Personal Settings</a> | <a href="contact.html">Contact Us</a></p>      
+    </div>
+  </div>
+</body>
+</html>

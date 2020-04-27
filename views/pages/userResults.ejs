@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta http-equiv ="Content-Type" content="text/html; charset=UTF-8">
+<head>
+<title>Eagle Database</title>
+</head>
+<header class="w3-container w3-theme-d3 w3-padding-16">
+	<h1>All Current Users</h1>
+</header>
+<div class="w3-container w3-half w3-margin-top">
+<table border="1" cellpadding="7" cellspacing="7">
+  <tr>
+    <th width="50px">No</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>EagleID</th>
+    <th>Password</th>
+  </tr>
+  <% if(data.length){ 
+    for(var i = 0;i < data.length;i++) { %>
+  <tr>
+    <td><%=(i+1)%></td>
+    <td><%=data[i].fname%></td>
+    <td><%=data[i].lname%></td>
+    <td><%=data[i].email%></td>
+    <td><%=data[i].EagleID%></td>
+    <td><%=data[i].password%></td>
+  </tr>
+  <% }
+  }else{ %>
+  <tr>
+    <td colspan="3">No Results</td>
+  </tr>
+<% } %>
+</table>
+</div>
+</html>
