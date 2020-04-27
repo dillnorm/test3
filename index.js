@@ -3,12 +3,9 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
-
-
 var MongoClient = require('mongodb').MongoClient;
 var mysql = require('mysql');
 var url = "mongodb://heroku_2kh2d2md:fvk1av77245n3rmfp61tib51lm@ds239965.mlab.com:39965/heroku_2kh2d2md";
-
 
 
 var con = mysql.createConnection("mysql://swswaeafj5nuj6am:xvruel2p7cfi8iul@z37udk8g6jiaqcbx.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ig9o8wsh8i2eqon4");
@@ -115,6 +112,66 @@ app.post('/getquestions', urlencodedParser, function (req, res){
 	});
 });
 
+//CheckRegistered
+app.post('/checkregistered', urlencodedParser, function(req, res){
+	var email = req.body.email; //if they are not registered, give them their current info
+	var query = "SELECT * FROM Account WHERE is_Registered=0 AND is_Athlete=1 AND email='"+email+"'";
+	con.query(query, function (err, result){
+		if(result.length>0){
+			console.log(result[0].Account_ID);
+			res.json({ id: result[0].Account_ID, email: result[0].email });
+		}
+		else res.json({ id: -1 }); //again, negative id is used as a failure state since it shouldn't ever happen
+	});
+});
+
+//MobileNewAcc
+app.post('/mobilenewacc', urlencodedParser, function(req, res){
+	var id = req.body.id;
+	var name = req.body.name;
+	var team = req.body.team;
+	//survey_done will be 0 initially, always
+	var query = "INSERT INTO Athletes (full_name, team_ID, Account_ID, survey_done) VALUES ('"+name+"', "+team+", "+id+", 0)";
+	con.query(query, function(err, result){
+		if(err){
+			console.log(err);
+			res.json({ status: -1 });
+		}
+		else{
+			res.json({ status: 1 });
+		}
+	});
+});
+
+//SurveyFinished
+app.post('/surveyfinished', urlencodedParser, function(req, res){
+	var id = req.body.id;
+	var query = "UPDATE Athletes SET survey_done = 1 WHERE Account_ID ="+id;
+	con.query(query, function(err, result){
+		if(err){
+			console.log(err);
+			res.json({ status: -1 });
+		}
+		else{
+			res.json({ status: 1 });
+		}
+	});
+});
+
+//New Password
+app.post('/newpass', urlencodedParser, function(req, res){
+	var id=req.body.id;
+	var pw=req.body.pw;
+	var query = "UPDATE Account SET password='"+pw+"', is_Registered=1 WHERE is_Registered=0 AND Account_ID ="+id;
+	con.query(query, function(err, result){
+		if(err){
+			console.log(err);
+			res.json({ status: -1 });
+		}
+		else res.json({status: 1});
+	})
+});
+
 //-------------------------------------------
 //Submit Answer
 app.post('/submitanswer', urlencodedParser, function(req, res){
@@ -147,31 +204,64 @@ app.get('/login', urlencodedParser, function (req, res) {
 });
 
 app.post('/login', urlencodedParser, function (req, res) {
-	console.log("Test Login: " + req.body.name);
+	console.log("Test1" + req.body.name);
 	//Create boolean to verify user login
 	var verify = false;
 	//Get ID and password from body
-	var Email = req.body.name;
+	var ID = req.body.name;
 	var pass = req.body.password;
 	//Create verification variables
-	var vEmail = "Nothing";
+	var vID = "Nothing";
 	var vPass = 0;
-	var vFN = "Temporary";
+	var vFN = 0;
+	var vLN = 0;
 	//Database query the name and password
-  	var sql = "SELECT email, password FROM ig9o8wsh8i2eqon4.Account WHERE email = '"+Email+"' AND password ='"+pass+"'";
-  	con.query(sql,function (err, result) {
-    		if (err) throw err;
-    		console.log(result);
-		vEmail = result[0].email;
-		vPass = result[0].password;
-		if ((Email == vEmail) && (pass == vPass)) {
-			console.log("Logged in");
-			res.render('pages/main.ejs');
-		}
-		else{
-			res.render('pages/index.ejs');
-		}
-  	});
+	MongoClient.connect(url, function (err, db) {
+		if (err) throw err;
+		var dbo = db.db("heroku_2kh2d2md");
+		var query = ({ EagleID: ID }, { password: pass });
+		dbo.collection("users").find(query).toArray(function (err, result) {
+			if (err) {
+				throw err;
+				res.render('pages/index.ejs');
+			} else {
+				//Error Caused here
+				try {
+					vID = result[0].EagleID;
+					vPass = result[0].password;
+					vFN = result[0].fname;
+					vLN = result[0].lname;
+					currUserfName = vFN;
+					currUserlName = vLN;
+
+				} catch (e) {
+					if (e instanceof TypeError) {
+						// Output expected TypeErrors.
+						console.log(e);
+					} else {
+						// Output unexpected Errors.
+						logging.log(e, false);
+					}
+				}
+				//If its valid, login
+				if ((ID == vID) && (pass == vPass)) {
+					verify = true;
+				}
+				//If not back to login page
+				if (verify) {
+					var rows = 0;
+					var srows = 0;
+					console.log("Logged in");
+					res.render('pages/MemberPage.ejs', { name: vFN, lname: vLN });
+				} else {
+					res.render('pages/index.ejs');
+				}
+			}
+			db.close();
+		});
+	});
+
+
 });
 
 //------------------------------------------------------------------------------------------------------------------
@@ -184,69 +274,6 @@ app.post('/create', urlencodedParser, function (req, res) {
 	res.render('pages/createMember.ejs');
 });
 //--------------------------------------------------------------------------------------------------------------------
-app.get('/modSurvey', urlencodedParser, function (req, res) {
-	console.log("Modding Survey");
-	res.render('pages/modifySurveys.ejs');
-});
-
-//------------------------------------------------------------------------------------------------------------------
-// Test Page
-app.get("/personal.html", function (req, res) {
-	res.render('pages/personal.ejs');
-});
-app.get("/emailChange.html", function (req, res) {
-	res.render('pages/emailChange.ejs');
-});
-app.get("/login.html", function (req, res) {
-	res.render('pages/login.ejs');
-});
-app.get("/passwordChange.html", function (req, res) {
-	res.render('pages/passwordChange.ejs');
-});
-app.get("/surveys.html", function (req, res) {
-	rows = 0;
-	console.log("Testing SQL");
-	var sql = "SELECT * FROM Questions INNER JOIN PossibleAnswers ON Questions.question_ID = PossibleAnswers.question_ID";
-  	con.query(sql,function (err, result) {
-    		if (err) throw err;
-    		console.log(result);
-		rows = result;
-		res.render('pages/surveys.ejs', { page_title: "Test Table", data: rows });
-	});
-});
-app.get("/teams.html", function (req, res) {
-	rows = 0;
-	res.render('pages/teams.ejs', { page_title: "Test Table", data: rows });
-});
-app.get("/index.html", function (req, res) {
-	res.render('pages/main.ejs');
-});
-app.get("/contact.html", function (req, res) {
-	res.render('pages/contactInfo.ejs');
-});
-
-//--------------------------------------------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------------------------------------------
-// Send Email Action
-app.get('/email', urlencodedParser, function (req, res) {
-	console.log("New Member");
-});
-app.post('/email', urlencodedParser, function (req, res) {
-	console.log("Sending Email");	
-	smtpTransport.sendMail(mailOptions, function(error, response) {
-  		if (error) {
-    			console.log(error)
-  		} else {
-    			console.log("Successfully sent email.")
-  		}	
-	});	
-	
-	res.render('pages/createMember.ejs');
-});
-//--------------------------------------------------------------------------------------------------------------------
-
-
 //Action to create new member in database
 app.get('/createNew', urlencodedParser, function (req, res) {
 	console.log("Creating Database");
@@ -259,22 +286,16 @@ app.post('/createNew', urlencodedParser, function (req, res) {
 	var dbemail = req.body.email;
 	var dbEagleID = req.body.ID;
 	var dbpassword = req.body.pass;
-	var ID;
-  	var sql = "SELECT Account_ID FROM ig9o8wsh8i2eqon4.Account";
-  	con.query(sql,function (err, result) {
-    		if (err) throw err;
-    		console.log(result);
-		ID = result[(result.length)-1].Account_ID;
-		console.log(ID);
-		ID++;
-		console.log("New ID: "+ ID);
-  		var sql = "INSERT INTO ig9o8wsh8i2eqon4.Account (Account_ID,email, password, is_Athlete, is_Coach, is_Admin, is_Registered) VALUES ('"+ID+"','"+dbemail+"','"+dbpassword+"','1','0','0','1')";
-  		con.query(sql,function (err, result) {
-    			if (err) throw err;
-    			console.log("New record inserted");
-  		});
-  	});
-
+	MongoClient.connect(url, function (err, db) {
+		if (err) throw err;
+		var dbo = db.db("heroku_2kh2d2md");
+		var myobj = { fname: dbfname, lname: dblname, email: dbemail, EagleID: dbEagleID, password: dbpassword };
+		dbo.collection("users").insertOne(myobj, function (err, res) {
+			if (err) throw err;
+			console.log("Test User " + dbfname + " inserted");
+			db.close();
+		});
+	});
 	res.render('pages/index.ejs');
 });
 
@@ -294,7 +315,7 @@ app.post('/getUsers', urlencodedParser, function (req, res) {
 			if (err) throw err;
 			console.log(result);
 			rows = result;
-			res.render('pages/teams.ejs', { page_title: "Test Table", data: rows });
+			res.render('pages/userResults.ejs', { page_title: "Test Table", data: rows });
 			db.close();
 		});
 	});
@@ -320,19 +341,6 @@ app.post('/getSurvey', urlencodedParser, function (req, res) {
 			res.render('pages/surveyResults.ejs', { page_title: "Test Table", data: rows });
 			db.close();
 		});
-	});
-
-});
-app.post('/GetTeamData', urlencodedParser, function (req, res) {
-	var table;
-	console.log("Displaying Atheletes Table");
-	console.log(req.TeamSelect);
-	var sql = "SELECT * FROM Account INNER JOIN Athletes ON Account.Account_ID = Athletes.Account_ID;";
-  	con.query(sql,function (err, result) {
-    		if (err) throw err;
-			console.log(result);
-			rows = result;
-			res.render('pages/teams.ejs', { page_title: "Test Table", data: rows });
 	});
 
 });
